@@ -1,0 +1,38 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+
+void backtracking(int calories[], int i, int caloriesNow, int n, int k, int &counter){
+    if(caloriesNow == k){
+        counter++;
+        return;
+    }
+    if((i==n) || (caloriesNow > k)){
+        return;
+    }
+    backtracking(calories, i+1, caloriesNow + calories[i], n, k, counter);
+    backtracking(calories, i+1, caloriesNow, n, k, counter);
+}
+
+
+int main(){
+    int t;
+    cin >> t;
+    for(int i=0; i<t; i++){
+        int n;
+        cin >> n;
+        int calories[n];
+        
+        int k;
+        for(int j=0; j<n; j++){
+            cin >> calories[j];
+        }
+        cin >> k;
+        int counter = 0;
+        sort(calories, calories+n, greater<int>());
+        backtracking(calories, 0, 0, n, k, counter);
+        cout << counter << endl;
+    }
+    return 0;
+}
