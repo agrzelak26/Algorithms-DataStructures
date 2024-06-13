@@ -1,0 +1,48 @@
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+using namespace std;
+
+
+double findMax(int m, int nStart, int nEnd){
+    int middleN = (nStart+nEnd)/2;
+    double highestPoint = 0;
+    int highestM;
+    for(int i=0; i<m; i++){
+        if(P(middleN, i) > highestPoint){
+            highestPoint = P(middleN, i);
+            highestM = i;
+        }
+    }
+    double right, left;
+    if(middleN >= 0){
+        left = P(middleN-1, highestM);
+    } else {
+        left = 0;
+    }
+    if(middleN < m-1){
+        right = P(middleN+1, highestM);
+    } else {
+        right = 0;
+    }
+    
+    
+    if(left > highestPoint && highestPoint > right){
+        return findMax(m, nStart, middleN);
+    } else if(right > highestPoint && highestPoint > left){
+        return findMax(m, middleN+1, nEnd);
+    }
+    return highestPoint;
+}
+
+int main(){
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout.tie(nullptr);
+    int n, m;
+    cin >> n >> m;
+    cin.ignore();
+    double result = findMax(m, 0, n);
+    cout << (int)floor(result) << endl;
+    return 0;
+}
