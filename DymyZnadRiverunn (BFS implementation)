@@ -1,0 +1,80 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+struct Castle{
+    short int number;
+    short int distance;
+    bool visitedYet;
+    vector<short int> neighboors;
+};
+    
+
+    void BFS(int s, vector<Castle> &castles){
+        queue<short int> castleQueue;
+        castles[s].visitedYet = true;
+        castles[s].distance = 0;
+        castleQueue.push(s);
+        short int current;
+        while(!castleQueue.empty()){
+            current = castleQueue.front();
+            castleQueue.pop();
+    
+            for(int i=0; i<castles[current].neighboors.size(); i++){
+                if(!castles[castles[current].neighboors[i]].visitedYet){
+                    castleQueue.push(castles[current].neighboors[i]);
+                    castles[castles[current].neighboors[i]].visitedYet = true;
+                    castles[castles[current].neighboors[i]].distance = castles[current].distance;
+                    castles[castles[current].neighboors[i]].distance++;
+                }
+
+            }
+        }
+    }
+
+    void countMaxDistance(vector<Castle> castles){
+        short int maxDistance = 0;
+        for(int i=0; i<castles.size(); i++){
+            if((castles[i].distance > maxDistance) && !castles[i].neighboors.empty()){
+                maxDistance = castles[i].distance;
+            }
+        }
+        cout << maxDistance;
+    }
+
+    void countHowMany(int d, vector<Castle> castles){
+        short int counter = 0;
+        for(int i=0; i<castles.size(); i++){
+            if(((castles[i].distance * 2) <= d) && castles[i].distance != 0){
+                counter++;
+            }
+        }
+        cout << counter;
+    }
+
+
+
+
+int main(){
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout.tie(nullptr);
+    
+    int n, m, s, d;
+    cin >> n >> m >> s >> d;
+    cin.ignore();
+    vector<Castle> castles(n);
+    short int first, second;
+    for(int i=0; i<m; i++){
+        cin >> first >> second;
+        cin.ignore();
+        castles[second].neighboors.push_back(first);
+        castles[first].neighboors.push_back(second);
+    }
+    BFS(s, castles);
+    countMaxDistance(castles);
+    cout << " ";
+    countHowMany(d, castles);
+    return 0;
+}
