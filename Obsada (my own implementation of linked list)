@@ -1,0 +1,137 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+struct Actor{
+    string name;
+    long int f;
+};
+
+struct Node{
+    Actor person;
+    Node* next;
+};
+
+class LinkedList{
+    Node* head;
+public:     
+    LinkedList(){
+        head = nullptr;
+    }
+
+    ~LinkedList(){
+        Node* pom;
+        while (head != nullptr){
+            pom = head;
+            head = head->next;
+            delete pom;
+        }
+    }      
+
+    bool alreadyExists(Actor actor){
+        Node* current = head;
+        while(current != nullptr){
+            if((current->person.name == actor.name) && (current->person.f == actor.f)){
+                return true;
+            }
+            current = current->next;
+        }
+        return false;
+    }
+
+    void add(Actor actor){
+        Node* newActor = new Node;
+        newActor->person = actor;
+        newActor->next = nullptr;
+        if(head == nullptr){
+            head = newActor;
+            cout << "TAK" << endl;
+            return;
+        }
+        if(alreadyExists(actor)){
+            cout << "NIE" << endl;
+            delete newActor;
+            return;
+        }
+        Node* current = head;
+        while(current->next != nullptr){
+            current = current->next;
+        }
+        current->next = newActor;
+        cout << "TAK" << endl;
+    }
+
+
+    void deleteActor(Actor actor){
+        Node* current = head;
+        Node* previous = nullptr;
+        while(current != nullptr){
+            if((current->person.name == actor.name) && (current->person.f == actor.f)){
+                if(previous != nullptr){
+                    previous->next = current->next;
+                } else {
+                    head = current->next;
+                }
+                delete current;
+                return;
+            }
+            previous = current;
+            current = current->next;
+        }
+    }
+
+    void search(long int p){
+        Actor temp;
+        temp.f = 0;
+        Node* current = head;
+        while(current != nullptr){
+            if(current->person.f <= p && ((current->person.f > temp.f) || 
+            (current->person.f == temp.f && current->person.name < temp.name))){
+                temp = current->person;
+            }
+            current = current->next;
+        }
+        if(temp.f == 0){
+            cout << "NIE" << endl;
+            return;
+        }
+        cout << temp.name << endl;
+        deleteActor(temp);
+    }
+};
+
+int main(){
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout.tie(nullptr);
+
+    LinkedList actors;
+    long int n, f, p;
+    string name;
+    string temp;
+    int op;
+    Actor actor;
+
+    cin >> n;
+    getline(cin, temp);
+    
+    for(int i=0; i<n; i++){
+        cin >> op;
+        getline(cin, temp);
+        if(op == 1){
+            getline(cin, name);
+            cin >> f;
+            getline(cin, temp);
+            actor.name = name;
+            actor.f = f;
+            actors.add(actor);
+        } else if(op == 2){
+            cin >> p;
+            getline(cin, temp);
+            actors.search(p);
+        }
+    }
+
+    return 0;
+}
