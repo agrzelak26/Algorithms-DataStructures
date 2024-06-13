@@ -1,0 +1,79 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <stdio.h>
+using namespace std;
+
+struct Car{
+    string name;
+    unsigned long long int rotations;
+};
+
+unsigned long long int count_rotations(long double p, unsigned int d){
+    double pi = 3.141593;
+    long double d_dbl = d * 0.0254;
+    long double circuit = d_dbl * pi;
+    p = p * 1000;
+    unsigned long long int full_rotations = (unsigned long long int)p/circuit;
+    return full_rotations;
+}
+
+bool compareByLongInt(const Car& a, const Car& b) {
+    if(a.rotations == b.rotations){
+        return a.name < b.name;
+    }
+    return a.rotations < b.rotations;
+}
+
+
+int main(){
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout.tie(nullptr);
+
+    unsigned long int n;
+    string name_p;
+    string name_prev;
+    long double p;
+    unsigned int d;
+    unsigned long long int rotations_p;
+    unsigned long long int rotations_prev;
+
+    cin >> n;
+    cin.ignore();
+    Car* tab = new Car[3];
+     for(int i=0; i<3; i++){
+        getline(cin, tab[i].name);
+        cin >> p >> d;
+        cin.ignore();
+        tab[i].rotations = count_rotations(p, d);
+    }
+    sort(tab, tab+3, compareByLongInt);
+    rotations_prev = tab[2].rotations;
+    name_prev = tab[2].name;
+
+    for(unsigned long int i=3; i<n; i++){
+        getline(cin, name_p);
+        cin >> p >> d;
+        cin.ignore();
+        rotations_p = count_rotations(p, d);
+        if(rotations_p < rotations_prev || (rotations_p == rotations_prev && name_prev > name_p)){
+            tab[2].name = name_p;
+            tab[2].rotations = rotations_p;
+            sort(tab, tab+3, compareByLongInt);
+            rotations_prev = tab[2].rotations;
+            name_prev = tab[2].name;
+        }
+    }
+
+    sort(tab, tab+3, compareByLongInt);
+
+    for(int i=0; i<3; i++){
+        cout << tab[i].name << endl;
+        cout << tab[i].rotations << endl;
+    }
+
+    delete[] tab;
+
+    return 0;
+}
