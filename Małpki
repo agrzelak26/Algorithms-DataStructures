@@ -1,0 +1,72 @@
+#include <iostream>
+#include <queue>
+using namespace std;
+
+struct Monkey{
+    char letter;
+    int legs;
+    int legsUsed;
+    vector<Monkey*> kids;
+
+    Monkey(char letter, int legs) : letter(letter), legs(legs), legsUsed(0) {}
+};
+
+struct Tree{
+    Monkey* root;
+    queue<Monkey*> monkeyQueue;
+
+    Tree() : root(nullptr) {}
+
+    void addMonkey(char letter, int legs) {
+        Monkey* newMonkey = new Monkey(letter,legs);
+
+        if (root == nullptr) {
+            root = newMonkey;
+            monkeyQueue.push(newMonkey);
+            return;
+        } else {
+            if(!monkeyQueue.empty() && (monkeyQueue.front()->legsUsed < monkeyQueue.front()->legs)){
+                monkeyQueue.front()->kids.push_back(newMonkey);
+                monkeyQueue.front()->legsUsed += 1;
+                monkeyQueue.push(newMonkey);
+            } else {
+                monkeyQueue.pop();
+                if(!monkeyQueue.empty()){
+                    monkeyQueue.front()->kids.push_back(newMonkey);
+                    monkeyQueue.front()->legsUsed += 1;
+                    monkeyQueue.push(newMonkey);
+                }
+            }
+        }
+    }
+
+    void preorder(Monkey* root) {
+        if (root != nullptr) {
+            cout << root->letter;
+            for(Monkey* monkey : root->kids){
+                preorder(monkey);
+            }
+        } else {
+            return;
+        }
+    }
+};
+
+int main(){
+    unsigned long int k, n;
+    char letter;
+    int legs;
+    cin >> k;
+    for(int i=0; i<k; i++){
+        Tree monkeyTree;
+        cin >> n;
+        for(int j=0; j<n; j++){
+            cin >> letter >> legs;
+            monkeyTree.addMonkey(letter, legs);
+        }
+        monkeyTree.preorder(monkeyTree.root);
+        cout << endl;
+    }
+
+    return 0;
+}
