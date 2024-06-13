@@ -1,0 +1,23 @@
+#include <iostream>
+
+int main(){
+    long long int a, b;
+    int numb_of_pairs;
+
+    std::cin >> numb_of_pairs;
+
+    long long int sums[numb_of_pairs];
+    for(int i=0; i<numb_of_pairs; i++){
+        scanf("%lld %lld", &a, &b);
+        sums[i] = a + b;
+    }
+
+    for(int i=0; i<numb_of_pairs; i++){
+        printf("%lld\n", sums[i]);
+    }
+
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout.tie(nullptr);
+    return 0;
+}
