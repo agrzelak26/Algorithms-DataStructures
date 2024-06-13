@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+string create(int one, int two, int three, int four, vector<string>& aristocrats){
+    string name;
+    string temp;
+    temp = aristocrats[one].substr(0, 3);
+    name.append(temp);
+    temp = aristocrats[two].substr(3, 3);
+    name.append(temp);
+    temp = aristocrats[three].substr(6, 3);
+    name.append(temp);
+    temp = aristocrats[four].substr(9, 3);
+    name.append(temp);
+    return name;
+}
+
+
+
+
+int main(){
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout.tie(nullptr);
+
+    int n, m;
+    cin >> n >> m;
+    cin.ignore();
+    string name;
+    vector<string> aristocrats(1500);
+    int last;
+    for(int i=0; i<m; i++){
+        getline(cin, name);
+        if(name.length() == 12){
+            aristocrats[i%1500] = name; 
+        }
+        last = i;
+    }
+    int first, second, third, forth;
+    
+    for(int i=m; i<n; i++){
+        cin >> first >> second >> third >> forth;
+        cin.ignore();
+        aristocrats[i%1500] = create(first%1500, second%1500, third%1500, forth%1500, aristocrats);
+        last = i%1500;
+    }
+    cout << aristocrats[last] << endl;
+
+    return 0;
+}
