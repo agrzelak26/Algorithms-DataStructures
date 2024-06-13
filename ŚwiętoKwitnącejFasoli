@@ -1,0 +1,51 @@
+#include <iostream>
+using namespace std;
+
+
+void findMostAndLeastCommon(int* howMany, int results[]){
+    int max = 1;
+    int min = 2000000;
+    int index_max = 0;
+    int index_min = 0;
+    for(int i=25; i>=0; i--){
+        if (howMany[i] >= max){
+            max = howMany[i];
+            index_max = i;
+        }
+        if (howMany[i] <= min && howMany[i] > 0){
+            min = howMany[i];
+            index_min = i;
+        }
+    }
+    results[0] = index_max;
+    results[1] = index_min;
+}
+
+int main(){
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout.tie(nullptr);
+
+    int* howMany = new int[26];
+    int mostAndLeastUsed[2];
+    char letter;
+
+    while(letter != '^'){
+        cin >> letter;
+         if(letter >= 'A' && letter <= 'Z'){
+            letter += 32;
+        }
+        if(letter >= 'a' && letter <= 'z'){
+            howMany[letter - 97]++;
+        }
+    }
+    findMostAndLeastCommon(howMany, mostAndLeastUsed);
+    delete[] howMany;
+
+    char most = char(mostAndLeastUsed[0] + 97);
+    char least = char(mostAndLeastUsed[1] + 97);
+
+    cout << most << " " << least << endl;
+
+    return 0;
+}
