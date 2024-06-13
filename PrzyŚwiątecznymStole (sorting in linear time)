@@ -1,0 +1,62 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+void countingSortByModulo(int tab[], int n, int tabSorted[], string names[], string namesSorted[]) {
+    int counter[n] = {0};
+    for(int i=0; i<n; i++){
+        counter[tab[i]%n] += 1;
+    }
+    for(int i=1; i<n; i++){
+        counter[i] += counter[i-1];
+    }
+    for(int i=n-1; i>=0; i--){
+        tabSorted[counter[tab[i]%n]-1] = tab[i];
+        namesSorted[counter[tab[i]%n]-1] = names[i];
+        counter[tab[i]%n] -= 1;
+    }
+}
+
+void countingSortByDivide(int tab[], int n, int tabSorted[], string names[], string namesSorted[]) {
+    int counter[n] = {0};
+
+    for(int i=0; i<n; i++){
+        counter[tab[i]/n] += 1;
+    }
+    for(int i=1; i<n; i++){
+        counter[i] += counter[i-1];
+    }
+    for(int i=n-1; i>=0; i--){
+        tabSorted[counter[tab[i]/n]-1] = tab[i];
+        namesSorted[counter[tab[i]/n]-1] = names[i];
+        counter[tab[i]/n] -= 1;
+    }
+}
+
+int main(){
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout.tie(nullptr);
+    int n;
+    int calories;
+    cin >> n;
+    cin.ignore();
+    string names[n];
+    int tab[n];
+    for(int i=0; i<n; i++){
+        getline(cin, names[i], ' ');
+        cin >> calories;
+        cin.ignore();
+        tab[i] = calories;
+    }
+    int tabSorted[n];
+    int tabSortedSorted[n];
+    string namesSorted[n];
+    countingSortByModulo(tab, n, tabSorted, names, namesSorted);
+    countingSortByDivide(tabSorted, n, tabSortedSorted, namesSorted, names);
+
+    for(int i=0; i<n; i++){
+        cout << names[i] << " ";
+    }
+    return 0;
+}
