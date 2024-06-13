@@ -1,0 +1,88 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+struct Place{
+    int difficulty;
+    int index;
+};
+
+bool comparator(Place const& first, Place const& second){
+    if(first.difficulty < second.difficulty){
+        return true;
+    } else if(first.difficulty == second.difficulty && first.index > second.index){
+        return true;
+    } else return false;
+}
+
+void createHeap(Place places[], int i){
+    int father = (i-1)/2;
+    if (comparator(places[father], places[i])) {
+        swap(places[i], places[father]);
+    }
+    if(father == 0){
+        return;
+    }
+    if(i>=1){
+        createHeap(places, father);
+    }
+    
+}
+
+void partitionHeap(Place places[], int& n){
+    if(n<=0) return;
+    swap(places[0], places[n - 1]);
+    n -= 1;
+    int current = 0;
+    while(1){
+        int smallest = current;
+        int sonFirst = 2*current+1;
+        int sonSecond = 2*current+2;
+
+        if(sonFirst < n && comparator(places[smallest], places[sonFirst])) {
+            smallest = sonFirst;
+        }
+        if(sonSecond < n && comparator(places[smallest], places[sonSecond])) {
+            smallest = sonSecond;
+        }
+        if(smallest != current) {
+            swap(places[smallest], places[current]);
+            current = smallest;
+        } else {
+            break;
+        }
+    }
+}
+
+void search(Place places[], string names[], int maxActivity, int& n){
+    if(maxActivity == 0) return;
+    if(places[0].difficulty <= maxActivity){
+        maxActivity -= places[0].difficulty;
+        cout << names[places[0].index] << " ";
+    }
+    partitionHeap(places, n);
+    if(n == 0) return;
+    search(places, names, maxActivity, n);
+}
+
+
+int main(){
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout.tie(nullptr);
+    int n;
+    cin >> n;
+    string names[n];
+    Place places[n];
+    int maxActivity;
+    for(int i=0; i<n; i++){
+        cin >> names[i];
+        cin >> places[i].difficulty;
+        places[i].index = i;
+        createHeap(places, i);
+    }
+    cin >> maxActivity;
+    search(places, names, maxActivity, n);
+    return 0;
+}
