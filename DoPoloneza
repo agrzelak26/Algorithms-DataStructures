@@ -1,0 +1,114 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+struct Student{
+    string code;
+    float average;
+    unsigned int distance;
+    int month;
+};
+
+void insertionSort(Student* tab, char first, char second, char third, unsigned long int n){
+    Student temp;
+    int j;
+    if(first == 's'){
+        if(second == 'd')
+        for (int i=1; i<n; i++) {
+            temp = tab[i];
+            j = i-1;
+            while (j>=0 && ((tab[j].average < temp.average) || (tab[j].average == temp.average && tab[j].distance < temp.distance) || (tab[j].average == temp.average && tab[j].distance == temp.distance && tab[j].month < temp.month))) {
+                tab[j+1] = tab[j];
+                j--;
+            }
+            tab[j+1] = temp;
+        }
+        if(second == 'm')
+        for (int i=1; i<n; i++) {
+            temp = tab[i];
+            j = i-1;
+            while (j>=0 && ((tab[j].average < temp.average) || (tab[j].average == temp.average && tab[j].month < temp.month) || (tab[j].average == temp.average && tab[j].month == temp.month && tab[j].distance < temp.distance))) {
+                tab[j+1] = tab[j];
+                j--;
+            }
+            tab[j+1] = temp;
+        }
+
+    }
+    if(first == 'd'){
+        if(second == 's')
+        for (int i=1; i<n; i++) {
+            temp = tab[i];
+            j = i-1;
+            while (j>=0 && ((tab[j].distance < temp.distance) || (tab[j].distance == temp.distance && tab[j].average < temp.average) || (tab[j].distance == temp.distance && tab[j].average == temp.average && tab[j].month < temp.month))) {
+                tab[j+1] = tab[j];
+                j--;
+            }
+            tab[j+1] = temp;
+        }
+        if(second == 'm')
+        for (int i=1; i<n; i++) {
+            temp = tab[i];
+            j = i-1;
+            while (j>=0 && ((tab[j].distance < temp.distance) || (tab[j].distance == temp.distance && tab[j].month < temp.month) || (tab[j].distance == temp.distance && tab[j].month == temp.month && tab[j].average < temp.average))) {
+                tab[j+1] = tab[j];
+                j--;
+            }
+            tab[j+1] = temp;
+        }
+    }
+    if(first == 'm'){
+        if(second == 's')
+        for (int i=1; i<n; i++) {
+            temp = tab[i];
+            j = i-1;
+            while (j>=0 && ((tab[j].month < temp.month) || (tab[j].month == temp.month && tab[j].average < temp.average) || (tab[j].month == temp.month && tab[j].average == temp.average && tab[j].distance < temp.distance))) {
+                tab[j+1] = tab[j];
+                j--;
+            }
+            tab[j+1] = temp;
+        }
+        if(second == 'd')
+        for (int i=1; i<n; i++) {
+            temp = tab[i];
+            j = i-1;
+            while (j>=0 && ((tab[j].month < temp.month) || (tab[j].month == temp.month && tab[j].distance < temp.distance) || (tab[j].month == temp.month && tab[j].distance == temp.distance && tab[j].average < temp.average))) {
+                tab[j+1] = tab[j];
+                j--;
+            }
+            tab[j+1] = temp;
+        }
+    }
+}
+
+
+int main(){
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout.tie(nullptr);
+    unsigned long int n;
+    char first, second, third;
+    cin >> n;
+    cin.ignore();
+    cin >> first >> second >> third;
+
+    Student* girls = new Student[n];
+    Student* boys = new Student[n];
+
+    for(int i=0; i<n; i++){
+        cin >> girls[i].code >> girls[i].average >> girls[i].distance >> girls[i].month >> boys[i].code >> boys[i].average >> boys[i].distance >> boys[i].month;
+    }
+
+    insertionSort(girls, first, second, third, n);
+    insertionSort(boys, first, second, third, n);
+
+    for(int i=0; i<n; i++){
+        cout << girls[i].code << " " << boys[i].code << " ";
+    }
+
+    delete[] girls;
+    delete[] boys;
+
+    return 0;
+}
